@@ -198,16 +198,17 @@ if (navigator.mozGetUserMedia) {
     } else if (typeof element.mozSrcObject !== 'undefined') {
       element.mozSrcObject = stream;
     } else if (typeof element.src !== 'undefined') {
-
-    if (stream) {
-        element.src = URL.createObjectURL(stream);
+        if (stream) {
+            element.src = URL.createObjectURL(stream);
+        }
+        else if (element.src && typeof URL.revokeObjectURL !== 'undefined') {
+            // createObjectURL(null) -> Failed to execute 'createObjectURL' on 'URL': No function was found that matched the signature provided.
+            URL.revokeObjectURL(element.src);
+            element.src = null;
+        }
+    } else {
+      console.log('Error attaching stream to element.');
     }
-    else if (element.src && typeof URL.revokeObjectURL !== 'undefined') {
-        // createObjectURL(null) -> Failed to execute 'createObjectURL' on 'URL': No function was found that matched the signature provided.
-        URL.revokeObjectURL(element.src);
-        element.src = null;
-    }
-
     return element;
   };
 
