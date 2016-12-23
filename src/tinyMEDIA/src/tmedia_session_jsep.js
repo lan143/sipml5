@@ -348,7 +348,8 @@ tmedia_session_jsep.prototype.close = function () {
                 try {
                     var tracks = this.o_local_stream.getTracks();
                     for (var track in tracks) {
-                        tracks[track].stop();
+                        if (tracks[track] !== undefined)
+                            tracks[track].stop();
                     }
                 } catch (e) { tsk_utils_log_error(e); }
                 try { this.o_local_stream.stop(); } catch (e) { } // Deprecated in Chrome 45: https://github.com/DoubangoTelecom/sipml5/issues/231
